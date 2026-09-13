@@ -1,0 +1,12 @@
+{
+  "name": "MiSTer Monitor Guition 10.1\" (test build)",
+  "version": "test",
+  "builds": [
+    {
+      "chipFamily": "ESP32-P4",
+      "parts": [
+        { "path": "guition-10inch-test.bin", "offset": 0 }
+      ]
+    }
+  ]
+}

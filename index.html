@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MiSTer Monitor — Guition 10.1" test build</title>
+    <script
+      type="module"
+      src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js"
+    ></script>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        max-width: 640px;
+        margin: 40px auto;
+        padding: 0 20px;
+        line-height: 1.5;
+        color: #1a1a1a;
+      }
+      h1 { font-size: 1.4rem; }
+      h2 { font-size: 1.05rem; margin-top: 28px; }
+      .card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 24px 0;
+      }
+      ol { padding-left: 20px; }
+      li { margin: 8px 0; }
+      .note { color: #666; font-size: 0.9rem; }
+      .warn {
+        background: #fff8e1;
+        border: 1px solid #ffe082;
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-size: 0.92rem;
+      }
+      code { background: #f2f2f2; padding: 1px 5px; border-radius: 4px; }
+    </style>
+  </head>
+  <body>
+    <h1>MiSTer Monitor — Guition 10.1" test build</h1>
+
+    <p>
+      This build fixes two separate problems on this board: the
+      <strong>horizontal banding</strong> on the newer panel revision, and the
+      <strong>WiFi that scans networks but never connects</strong>. Do the SD
+      card steps first — the firmware needs them on its very first boot.
+    </p>
+
+    <h2>1. Prepare the SD card</h2>
+
+    <div class="card">
+      <ol>
+        <li>
+          Put the card in your computer and download
+          <a href="c6_firmware.bin" download>c6_firmware.bin</a> into its
+          <strong>root</strong>, next to <code>config.ini</code>.
+        </li>
+        <li>
+          Open <code>config.ini</code> and add this line in the
+          <code>[ui]</code> section:
+          <br /><code>panel_rev=v2</code>
+        </li>
+      </ol>
+      <p class="note">
+        The batch number on the sticker at the back tells you which panel you
+        have — it is the figure in parentheses after the SKU. Batch 2624 and
+        later need <code>v2</code>; earlier ones need <code>v1</code>.
+      </p>
+    </div>
+
+    <h2>2. Flash</h2>
+
+    <div class="card">
+      <ol>
+        <li>Use a <strong>computer</strong> (not a phone) with <strong>Chrome</strong> or <strong>Edge</strong>.</li>
+        <li>Connect the board with a <strong>USB-C data cable</strong> (not a charge-only one).</li>
+        <li>Click <strong>Install / Connect</strong>, pick the port and wait without touching anything.</li>
+      </ol>
+      <p>
+        <esp-web-install-button manifest="manifest.json"></esp-web-install-button>
+      </p>
+      <p class="note">Firefox and Safari won't work (they lack Web Serial).</p>
+    </div>
+
+    <div class="warn">
+      <strong>If no port shows up:</strong> only one of the USB-C ports on this
+      board is wired for serial — try the others. This chip has native USB, so
+      no driver is needed.
+    </div>
+
+    <h2>3. What should happen</h2>
+
+    <p>
+      Put the card back in, power the display and watch the first boot. It
+      checks the WiFi coprocessor, finds it out of date, updates it from
+      <code>c6_firmware.bin</code> with a progress bar, and restarts itself
+      once. <strong>Do not power it off during that bar.</strong> After the
+      restart it should connect to WiFi normally, and the screen should show
+      the interface rather than banding.
+    </p>
+
+    <p>
+      If anything goes wrong, the serial log at boot is what I need — the
+      relevant lines start with <code>[C6]</code> and <code>[DISPLAY]</code>.
+      Nothing here is one-way: you can put <code>panel_rev=v1</code> back and
+      reflash the released firmware from the normal flasher page at any point.
+    </p>
+  </body>
+</html>

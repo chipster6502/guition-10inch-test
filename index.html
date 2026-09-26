@@ -105,10 +105,21 @@
       <strong>If no port shows up or you get "Failed to initialize":</strong>
       check that the cable is in the port next to the white connector. The
       other two USB-C ports power the board too, but the flasher cannot
-      connect through them. If the flasher still fails on the right port,
-      <code>esptool --chip esp32p4 write-flash 0x0 guition-10inch-test.bin</code>
-      does the same job.
+      connect through them. On some v3 chips the browser flasher fails even
+      on the right port; esptool works on those (see below).
     </div>
+
+    <h2>Flashing with esptool instead</h2>
+    <p>
+      Download <a href="guition-10inch-test.bin" download>guition-10inch-test.bin</a>
+      and flash it from the folder you saved it to, with the cable in the same
+      USB-C port:
+    </p>
+    <p><code>esptool --chip esp32p4 write-flash 0x0 guition-10inch-test.bin</code></p>
+    <p>
+      esptool finds the port on its own; add <code>--port COM5</code> (or your
+      port) if it picks the wrong one. The SD card steps above still apply.
+    </p>
 
     <h2>3. What should happen</h2>
 
